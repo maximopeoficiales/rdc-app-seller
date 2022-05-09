@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION sp_listar_detail_email_for_send(ni_order_master_id integer)
-    returns TABLE
+create or replace function sp_listar_detail_email_for_send(ni_order_master_id integer)
+    returns table
             (
                 order_detail_id               bigint,
                 order_master_id               bigint,
@@ -33,95 +33,95 @@ as
 $$
     /*************
    
-     | * Descripcion : FUNCTION public.sp_listar_detail_email_for_send
+     | * descripcion : function public.sp_listar_detail_email_for_send
    
-     | * Proposito   : Funcion para obtener el detalle de los correos.
+     | * proposito   : funcion para obtener el detalle de los correos.
    
-     | * Input Parameters:
+     | * input parameters:
    
-     | * Output Parameters:
+     | * output parameters:
    
-     |   - <order_detail_id>                   :ID del detalle de la orden.
+     |   - <order_detail_id>                   :id del detalle de la orden.
    
-     |   - <order_master_id>                    :ID de la orden creada en el formulario.
+     |   - <order_master_id>                    :id de la orden creada en el formulario.
    
-     |   - <product_type_id>                      :Tipo del producto.
+     |   - <product_type_id>                      :tipo del producto.
    
-     |   - <product_id>                 :Identificador del producto.
+     |   - <product_id>                 :identificador del producto.
    
-     |   - <quantity_products>                 			:Cantidad de productos.
+     |   - <quantity_products>                 			:cantidad de productos.
    
-     |   - <quantity_products_return>                  :Cantidad de productos a retornar.
+     |   - <quantity_products_return>                  :cantidad de productos a retornar.
    
-     |   - <monto>                     :Monto.
+     |   - <monto>                     :monto.
    
-     |   - <monto_affected>                   :Monto afectado.
+     |   - <monto_affected>                   :monto afectado.
    
-     |   - <operation_type_id>            :Tipo de operacion.
+     |   - <operation_type_id>            :tipo de operacion.
    
-     |   - <reason_operation_id>            :Motivo de devolucion.
+     |   - <reason_operation_id>            :motivo de devolucion.
    
-     |   - <product_url>            :Url del producto.
+     |   - <product_url>            :url del producto.
    
-     |   - <flag_offers>                       :Estado de la oferta.
+     |   - <flag_offers>                       :estado de la oferta.
    
-     |   - <offers>                :Oferta.
+     |   - <offers>                :oferta.
    
-     |   - <product>                :Nombre del producto.
+     |   - <product>                :nombre del producto.
    
-     |   - <classification_products_id>                    :ID clasificacion del producto.
+     |   - <classification_products_id>                    :id clasificacion del producto.
    
-     |   - <model>                   :Modelo del producto.
+     |   - <model>                   :modelo del producto.
    
-     |   - <size>                             :Talla del producto.
+     |   - <size>                             :talla del producto.
    
-     |   - <image>                       :Imagen del producto.
+     |   - <image>                       :imagen del producto.
    
-     |   - <brand>                   		:Marca del producto.
+     |   - <brand>                   		:marca del producto.
    
-     |   - <quantity_products_return_real>                  :Cantidad del productos.
+     |   - <quantity_products_return_real>                  :cantidad del productos.
    
-     |   - <monto_affected_real>                          :Monto afectado.
+     |   - <monto_affected_real>                          :monto afectado.
    
-     |   - <flag_return>                      :Estado de retorno.
+     |   - <flag_return>                      :estado de retorno.
    
-     |   - <price_by_unit_total>                :Precio total.
+     |   - <price_by_unit_total>                :precio total.
    
-     |   - <days_expiration>                :Dias de expiracion.
+     |   - <days_expiration>                :dias de expiracion.
    
-     |   - <expiration_date>                :Fecha de expiracion.
+     |   - <expiration_date>                :fecha de expiracion.
    
-     |   - <seller_name>                :Nombre del vendedor.
+     |   - <seller_name>                :nombre del vendedor.
    
-     | * Autor       : Gianmarcos Perez Rojas.
+     | * autor       : gianmarcos perez rojas.
    
-     | * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+     | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
    
-     | * Responsable : Cesar Jimenez.
+     | * responsable : cesar jimenez.
    
-     | * RDC         : RQ-4657-8
+     | * rdc         : rq-4657-8
    
      |
    
-     | * Revisiones
+     | * revisiones
    
-     | * Fecha            Autor       Motivo del cambio            RDC
+     | * fecha            autor       motivo del cambio            rdc
    
      | ----------------------------------------------------------------------------
    
-     | - 14/09/21    Gianmarcos Perez Se agrega sucursal y trx     RQ 4657-8   
+     | - 14/09/21    gianmarcos perez se agrega sucursal y trx     rq 4657-8   
    
-     | - 30/03/22    Paulo Carbajal Nombre del vendedor            RQ 4707-4                                                             
+     | - 30/03/22    paulo carbajal nombre del vendedor            rq 4707-4                                                             
    
      ************/
 
-DECLARE
+declare
 
     r               order_detail%rowtype;
     d_purchase_date date;
     n_purchase_id   int8;
 
-BEGIN
+begin
 
     select a.purchase_date, a.purchase_id
     into d_purchase_date, n_purchase_id
@@ -134,8 +134,8 @@ BEGIN
     where a.order_id = ni_order_master_id;
 
 
-    RETURN QUERY
-        SELECT a.order_detail_id,
+    return query
+        select a.order_detail_id,
                a.order_id as order_master_id,
                a.product_type_id,
                a.product_id,
@@ -167,17 +167,17 @@ BEGIN
 
                a.seller_name
 
-        FROM order_detail a
+        from order_detail a
 
-                 LEFT JOIN purchase_detail pd
-                           ON pd.product_id = a.product_id and
+                 left join purchase_detail pd
+                           on pd.product_id = a.product_id and
                               pd.purchase_id = n_purchase_id and
                               pd.suborder = pd.suborder
 
-        WHERE a.order_id = ni_order_master_id
-          AND a.quantity_products_return > 0;
+        where a.order_id = ni_order_master_id
+          and a.quantity_products_return > 0;
 
-END;
+end;
 
 $$;
 

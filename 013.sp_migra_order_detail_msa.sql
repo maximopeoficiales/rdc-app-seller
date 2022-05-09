@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
-    RETURNS TABLE
+create or replace function public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
+    returns table
             (
                 order_master_id     bigint,
                 ean                 character varying,
@@ -37,11 +37,11 @@ CREATE OR REPLACE FUNCTION public.sp_migra_order_detail_msa(ni_order_master_ini_
                 suborder            character varying,
                 type_product        character varying
             )
-    LANGUAGE plpgsql
-AS
+    language plpgsql
+as
 $$
 
-DECLARE
+declare
 
     r order%rowtype;
 
@@ -49,108 +49,108 @@ begin
 
     /*************
 
-  | * Descripcion : FUNCTION public.sp_migra_order_detail_msa
+  | * descripcion : function public.sp_migra_order_detail_msa
 
-  | * Proposito   : Funcion para traer el detalle de las ordenes
+  | * proposito   : funcion para traer el detalle de las ordenes
 
-  | * Input Parameters:
+  | * input parameters:
 
-  |   - <ni_order_master_ini_id> :Numero de ID ticket inicial.
+  |   - <ni_order_master_ini_id> :numero de id ticket inicial.
 
-  |   - <ni_order_master_fin_id> :Numero de ID ticket final.
+  |   - <ni_order_master_fin_id> :numero de id ticket final.
 
-  | * Output Parameters:
+  | * output parameters:
 
-  |   - <order_master_id>      :Id de la orden detalle.
+  |   - <order_master_id>      :id de la orden detalle.
 
-  |   - <ean>                   :Id producto.
+  |   - <ean>                   :id producto.
 
-  |   - <flag_cambio>                 :Estado de cambio
+  |   - <flag_cambio>                 :estado de cambio
 
-  |   - <cantidad>                :Cantidad
+  |   - <cantidad>                :cantidad
 
-  |   - <cantidad_return>                :Cantidad a retornar
+  |   - <cantidad_return>                :cantidad a retornar
 
-  |   - <precio>        :Precio
+  |   - <precio>        :precio
 
-  |   - <precio_affected>             :Precio afectado.
+  |   - <precio_affected>             :precio afectado.
 
-  |   - <descuento_articulo>                :Descuento articulo.
+  |   - <descuento_articulo>                :descuento articulo.
 
-  |   - <descuento_boleta>                 :Descuento boleta.
+  |   - <descuento_boleta>                 :descuento boleta.
 
-  |   - <reason_operation_id>               :Id motivo de devolucion.
+  |   - <reason_operation_id>               :id motivo de devolucion.
 
-  |   - <reason_operation>                 :Motivo de devolucion.
+  |   - <reason_operation>                 :motivo de devolucion.
 
-  |   - <operation_type_id>            :Tipo de operacion.
+  |   - <operation_type_id>            :tipo de operacion.
 
-  |   - <model>                :Modelo.
+  |   - <model>                :modelo.
 
-  |   - <size_product>                :Tamano del producto.
+  |   - <size_product>                :tamano del producto.
 
-  |   - <image>        :Imagen del producto.
+  |   - <image>        :imagen del producto.
 
-  |   - <brand>         :Marca del producto.
+  |   - <brand>         :marca del producto.
 
-  |   - <price_by_unit>      :Precio por unidad.
+  |   - <price_by_unit>      :precio por unidad.
 
-  |   - <is_enchufable>      :Tipo enchufable.
+  |   - <is_enchufable>      :tipo enchufable.
 
-  |   - <is_transport>  :Producto transportable.
+  |   - <is_transport>  :producto transportable.
 
-  |   - <days_expiration>             :Dias de expiracion.
+  |   - <days_expiration>             :dias de expiracion.
 
-  |   - <expiration_date>             :Fecha de expiracion.
+  |   - <expiration_date>             :fecha de expiracion.
 
-  |   - <price_by_unit_total>             :Precio por unidad.
+  |   - <price_by_unit_total>             :precio por unidad.
 
-  |   - <promotion>             :Promocion.
+  |   - <promotion>             :promocion.
 
-  |   - <promotion_code>             :Codigo de promocion.
+  |   - <promotion_code>             :codigo de promocion.
 
-  |   - <condition>             :Condicion.
+  |   - <condition>             :condicion.
 
-  |   - <color>             :Color.
+  |   - <color>             :color.
 
-  |   - <code_delivery>             :Codigo de delivery.
+  |   - <code_delivery>             :codigo de delivery.
 
-  |   - <mode_delivery>             :Modo de delivery.
+  |   - <mode_delivery>             :modo de delivery.
 
-  |   - <time_of_purchase>             :Fecha de compra.
+  |   - <time_of_purchase>             :fecha de compra.
 
-  |   - <seller_id>             :ID del vendedor.
+  |   - <seller_id>             :id del vendedor.
 
-  |   - <seller_name>             :Nombre del vendedor.
+  |   - <seller_name>             :nombre del vendedor.
 
-  |   - <suborder>             :Suborden.
+  |   - <suborder>             :suborden.
 
-  |   - <type_product>             :Tipo de producto marketplace o ripley.
+  |   - <type_product>             :tipo de producto marketplace o ripley.
 
-  | * Autor       : Paulo Carbajal.
+  | * autor       : paulo carbajal.
 
-  | * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+  | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
 
-  | * Responsable : Cesar Jimenez.
+  | * responsable : cesar jimenez.
 
-  | * RDC         : RQ-4657-15
+  | * rdc         : rq-4657-15
 
   |
 
-  | * Revisiones
+  | * revisiones
 
-  | * Fecha            Autor       Motivo del cambio                 RDC
+  | * fecha            autor       motivo del cambio                 rdc
 
   | ----------------------------------------------------------------------------
 
-  | - 30/03/22    Paulo Carbajal   Se agrega el seller id, nombre, suborden y tipo de producto             RQ 4707-4
+  | - 30/03/22    paulo carbajal   se agrega el seller id, nombre, suborden y tipo de producto             rq 4707-4
 
 
 
 ************/
 
-    RETURN QUERY
-        SELECT a.order_id as order_master_id,
+    return query
+        select a.order_id as order_master_id,
                a.product_id                                                                as ean,
 
                a.operation_type_id                                                         as flag_cambio,
@@ -171,7 +171,7 @@ begin
 
                a.reason_operation_id,
 
-               c.description                                                               AS reason_operation,
+               c.description                                                               as reason_operation,
 
                a.operation_type_id,
 
@@ -193,7 +193,7 @@ begin
 
                coalesce(a1.days_expiration, 60)                                            as days_expiration,
 
-               to_char(ord.purchase_date + coalesce(a1.days_expiration, 60), 'YYYY-MM-DD') as expiration_date,
+               to_char(ord.purchase_date + coalesce(a1.days_expiration, 60), 'yyyy-mm-dd') as expiration_date,
 
                a.price_by_unit_total,
 
@@ -201,7 +201,7 @@ begin
 
                a.promotion_code,
 
-               (CASE WHEN (d.condition is null) THEN 'A' ELSE d.condition END)             as condition,
+               (case when (d.condition is null) then 'a' else d.condition end)             as condition,
 
                a1.color,
 
@@ -219,7 +219,7 @@ begin
 
                a1.type_product
 
-        FROM order_detail a
+        from order_detail a
 
                  inner join public."order" ord
                             on ord.order_id = a.order_id
@@ -237,9 +237,9 @@ begin
                  left join public.classification_products d
                            on d.classification_products_id = a.classification_products_id
 
-        WHERE a.order_id >= ni_order_master_ini_id
+        where a.order_id >= ni_order_master_ini_id
           and a.order_id <= ni_order_master_fin_id;
 
-END;
+end;
 
 $$; 

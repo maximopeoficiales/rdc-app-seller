@@ -1,96 +1,96 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_email_for_send() RETURNS TABLE(order_master_id bigint, prospect_order bigint, order_number character varying, identity_document character varying, email character varying, purchase_type_id integer, purchase_date date, number_products integer, number_products_unique integer, number_products_return integer, number_products_change integer, monto_total numeric, monto_total_return numeric, monto_total_change numeric, estado_request integer, flag_send_email integer, id_qr character varying, category_idd integer, category character varying, method_id integer, bar_code character varying, email_option character varying, state_email_option integer, forma_pago character varying)
-    LANGUAGE plpgsql
-    AS $$
+create or replace function public.sp_listar_email_for_send() returns table(order_master_id bigint, prospect_order bigint, order_number character varying, identity_document character varying, email character varying, purchase_type_id integer, purchase_date date, number_products integer, number_products_unique integer, number_products_return integer, number_products_change integer, monto_total numeric, monto_total_return numeric, monto_total_change numeric, estado_request integer, flag_send_email integer, id_qr character varying, category_idd integer, category character varying, method_id integer, bar_code character varying, email_option character varying, state_email_option integer, forma_pago character varying)
+    language plpgsql
+    as $$
 
   /*************
 
-  | * Descripcion : FUNCTION public.sp_listar_email_for_send
+  | * descripcion : function public.sp_listar_email_for_send
 
-  | * Proposito   : Funcion para listart los correos que faltan enviar.
+  | * proposito   : funcion para listart los correos que faltan enviar.
 
-  | * Input Parameters:
+  | * input parameters:
 
-  | * Output Parameters:
+  | * output parameters:
 
-  |   - <order_master_id>                   :ID del detalle de la orden.
+  |   - <order_master_id>                   :id del detalle de la orden.
 
-  |   - <prospect_order>                    :ID de la orden creada en el formulario.
+  |   - <prospect_order>                    :id de la orden creada en el formulario.
 
-  |   - <order_number>                      :Número de orden.
+  |   - <order_number>                      :número de orden.
 
-  |   - <identity_document>                 :Documento de indentidad.
+  |   - <identity_document>                 :documento de indentidad.
 
-  |   - <email>                 			:Email.
+  |   - <email>                 			:email.
 
-  |   - <purchase_type_id>                  :Id tipo de compra.
+  |   - <purchase_type_id>                  :id tipo de compra.
 
-  |   - <purchase_date>                     :Fecha de compra.
+  |   - <purchase_date>                     :fecha de compra.
 
-  |   - <number_products>                   :Número de productos.
+  |   - <number_products>                   :número de productos.
 
-  |   - <number_products_unique>            :Número de productos únicos.
+  |   - <number_products_unique>            :número de productos únicos.
 
-  |   - <number_products_return>            :Número de productos devuelos.
+  |   - <number_products_return>            :número de productos devuelos.
 
-  |   - <number_products_change>            :Número de productos cambiados.
+  |   - <number_products_change>            :número de productos cambiados.
 
-  |   - <monto_total>                       :Monto total.
+  |   - <monto_total>                       :monto total.
 
-  |   - <monto_total_return>                :Monto total devuelto.
+  |   - <monto_total_return>                :monto total devuelto.
 
-  |   - <monto_total_change>                :Monto total de cambio.
+  |   - <monto_total_change>                :monto total de cambio.
 
-  |   - <estado_request>                    :Estado de la solicitud.
+  |   - <estado_request>                    :estado de la solicitud.
 
-  |   - <flag_send_email>                   :Bandera de correo enviado.
+  |   - <flag_send_email>                   :bandera de correo enviado.
 
-  |   - <id_qr>                             :ID del qr.
+  |   - <id_qr>                             :id del qr.
 
-  |   - <category_id>                       :ID de categoria.
+  |   - <category_id>                       :id de categoria.
 
-  |   - <category>                   		:Categoria.
+  |   - <category>                   		:categoria.
 
-  |   - <return_method_id>                  :ID de metodo de devolución.
+  |   - <return_method_id>                  :id de metodo de devolución.
 
-  |   - <bar_code>                          :Código de barra.
+  |   - <bar_code>                          :código de barra.
 
-  |   - <email_option>                      :Correo opcional.
+  |   - <email_option>                      :correo opcional.
 
-  |   - <state_email_option>                :Estado del correo opcional.
+  |   - <state_email_option>                :estado del correo opcional.
 
-  | * Autor       : Gianmarcos Perez Rojas.
+  | * autor       : gianmarcos perez rojas.
 
-  | * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+  | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
 
-  | * Responsable : Cesar Jimenez.
+  | * responsable : cesar jimenez.
 
-  | * RDC         : RQ-4657-8
+  | * rdc         : rq-4657-8
 
   |
 
-  | * Revisiones
+  | * revisiones
 
-  | * Fecha            Autor       Motivo del cambio            RDC
+  | * fecha            autor       motivo del cambio            rdc
 
   | ----------------------------------------------------------------------------
 
-  | - 14/09/21    Gianmarcos Perez Se agrega sucursal y trx     RQ 4657-8
+  | - 14/09/21    gianmarcos perez se agrega sucursal y trx     rq 4657-8
 
   ************/
 
-DECLARE
+declare
 
 	n_solicitudes_pendientes integer := 2;
 
 
 
-BEGIN
+begin
 
 
 
     update order x set category_id =
 
-	  (select max(case when b.division_id = 'G02' then 9
+	  (select max(case when b.division_id = 'g02' then 9
 
 	            when a.reason_operation_id = 4 then 7
 
@@ -112,23 +112,23 @@ BEGIN
 
 	    on c.classification_products_id = a.classification_products_id
 
-	  where a.order_id = x.order_id  AND
+	  where a.order_id = x.order_id  and
 
 		a.quantity_products_return > 0)
 
      where x.estado_request = n_solicitudes_pendientes ;
 
-    --Actualizamos electro de 9 a 2
+    --actualizamos electro de 9 a 2
 
     update order x set category_id = 2 where category_id = 9;
 
-    --Actualizamos fallado de 7 a 1
+    --actualizamos fallado de 7 a 1
 
 	update order x set category_id = 1 where category_id = 7;
 
-	RETURN QUERY
+	return query
 
-        SELECT a.order_id as order_master_id,
+        select a.order_id as order_master_id,
 
 			a.prospect_order,
 
@@ -176,7 +176,7 @@ BEGIN
 
 			p.forma_pago
 
-	FROM "order" a
+	from "order" a
 
 	join purchase p on p.purchase_id = a.purchase_id
 
@@ -184,8 +184,8 @@ BEGIN
 
 	on b.order_category_id = a.category_id
 
-	WHERE a.estado_request = n_solicitudes_pendientes  ;
+	where a.estado_request = n_solicitudes_pendientes  ;
 
-END;
+end;
 
 $$;

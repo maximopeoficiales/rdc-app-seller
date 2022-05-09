@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.sp_migra_order_msa(ni_order_master_id integer)
-    RETURNS TABLE
+create or replace function public.sp_migra_order_msa(ni_order_master_id integer)
+    returns table
             (
                 order_master_id          bigint,
                 order_number             character varying,
@@ -27,98 +27,98 @@ CREATE OR REPLACE FUNCTION public.sp_migra_order_msa(ni_order_master_id integer)
                 category_id              integer,
                 phone                    character varying
             )
-    LANGUAGE plpgsql
-AS
+    language plpgsql
+as
 $$
 
     /*************
 
-        | * Descripcion : FUNCTION public.sp_migra_order_msa
+        | * descripcion : function public.sp_migra_order_msa
 
-        | * Proposito   : Función para migrar datos de formulario a cayde.
+        | * proposito   : función para migrar datos de formulario a cayde.
 
-        | * Input Parameters:
+        | * input parameters:
 
-        |   - <ni_order_master_id>              :Id orden compra.
+        |   - <ni_order_master_id>              :id orden compra.
 
-        | * Output Parameters:
+        | * output parameters:
 
-        |   - <order_master_id>                 :Id order master.
+        |   - <order_master_id>                 :id order master.
 
-        |   - <nro_ticket>             			:Número de ticket.
+        |   - <nro_ticket>             			:número de ticket.
 
-        |   - <nro_boleta>               		:Número de boleta.
+        |   - <nro_boleta>               		:número de boleta.
 
-        |   - <nro_caja>          			    :Número de caja.
+        |   - <nro_caja>          			    :número de caja.
 
-        |   - <nro_sucursal>                    :Número de sucursal.
+        |   - <nro_sucursal>                    :número de sucursal.
 
-        |   - <fecha>             				:Fecha de compra.
+        |   - <fecha>             				:fecha de compra.
 
-        |   - <nro_transaccion>                 :Número de transacción.
+        |   - <nro_transaccion>                 :número de transacción.
 
-        |   - <monto_total>          			:Monto total.
+        |   - <monto_total>          			:monto total.
 
-        |   - <monto_total_return>              :Monto total devuelto.
+        |   - <monto_total_return>              :monto total devuelto.
 
-        |   - <purchase_type_id>             	:Id tipo compra.
+        |   - <purchase_type_id>             	:id tipo compra.
 
-        |   - <purchase_type>                   :Tipo de compra.
+        |   - <purchase_type>                   :tipo de compra.
 
-        |   - <identity_document>          		:Documento de identidad.
+        |   - <identity_document>          		:documento de identidad.
 
-        |   - <method_id>                       :Id Metodo devolución.
+        |   - <method_id>                       :id metodo devolución.
 
-        |   - <email>             				:Correo.
+        |   - <email>             				:correo.
 
-        |   - <purchase_id>                     :Id de compra.
+        |   - <purchase_id>                     :id de compra.
 
-        |   - <numero_documento>          		:Número de documento.
+        |   - <numero_documento>          		:número de documento.
 
-        |   - <cud>                             :Cud.
+        |   - <cud>                             :cud.
 
-        |   - <forma_pago>             			:Forma de pago.
+        |   - <forma_pago>             			:forma de pago.
 
-        |   - <email_option>                    :Correo opcional.
+        |   - <email_option>                    :correo opcional.
 
-        |   - <name_client>          			:Nombre del cliente.
+        |   - <name_client>          			:nombre del cliente.
 
-        |   - <person_first_name>               :Nombre devolucion a terceros.
+        |   - <person_first_name>               :nombre devolucion a terceros.
 
-        |   - <person_last_name>             	:Apellidos devolucion a terceros.
+        |   - <person_last_name>             	:apellidos devolucion a terceros.
 
-        |   - <person_identity_document>        :Número de documento devolucion a terceros.
+        |   - <person_identity_document>        :número de documento devolucion a terceros.
 
-        |   - <category_id>          			:Id Categoria.
+        |   - <category_id>          			:id categoria.
 
-        | * Autor       : Gianmarcos Perez Rojas.
+        | * autor       : gianmarcos perez rojas.
 
-        | * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+        | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
 
-        | * Responsable : Cesar Jimenez.
+        | * responsable : cesar jimenez.
 
-        | * RDC         : RQ-4657-14
+        | * rdc         : rq-4657-14
 
         |
 
-        | * Revisiones
+        | * revisiones
 
-        | * Fecha            Autor             Motivo del cambio            RDC
+        | * fecha            autor             motivo del cambio            rdc
 
         | ----------------------------------------------------------------------------
 
-        | - 16/11/21    Gianmarcos Perez       Agregar category_id    RQ 4657-14
+        | - 16/11/21    gianmarcos perez       agregar category_id    rq 4657-14
 
     ************/
 
-DECLARE
+declare
 
     -- r order_master%rowtype;
 
-BEGIN
+begin
 
-    RETURN QUERY
-        SELECT a.order_id as order_master_id,
+    return query
+        select a.order_id as order_master_id,
                a.order_number                              as nro_ticket,
 
                coalesce(pur.number_order, b1.number_order) as nro_boleta,
@@ -163,30 +163,30 @@ BEGIN
 
                a.person_identity_document,
 
-            /*INICIO CAMBIO RQ 4657-14*/
+            /*inicio cambio rq 4657-14*/
 
                a.category_id,
 
-            /*INICIO CAMBIO RQ 4657-14*/
+            /*inicio cambio rq 4657-14*/
 
                a.phone
 
-        FROM "order" a
+        from "order" a
 
                  inner join public.purchase pur
                             on pur.purchase_id = a.purchase_id
 
-                 LEFT JOIN order_purchase_internet b1
-                           ON b1.order_master_id = a.order_id
+                 left join order_purchase_internet b1
+                           on b1.order_master_id = a.order_id
 
-                 LEFT JOIN order_purchase_store b2
-                           ON b2.order_master_id = a.order_id
+                 left join order_purchase_store b2
+                           on b2.order_master_id = a.order_id
 
-                 LEFT JOIN public.purchase_type c
-                           ON c.purchase_type_id = a.purchase_type_id
+                 left join public.purchase_type c
+                           on c.purchase_type_id = a.purchase_type_id
 
-        WHERE a.order_id > ni_order_master_id;
+        where a.order_id > ni_order_master_id;
 
-END;
+end;
 
 $$;

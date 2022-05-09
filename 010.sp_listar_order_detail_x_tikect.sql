@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_order_detail_x_tikect(vi_tikect character varying)
-    RETURNS TABLE
+create or replace function public.sp_listar_order_detail_x_tikect(vi_tikect character varying)
+    returns table
             (
                 order_master_id          bigint,
                 order_number             character varying,
@@ -10,14 +10,14 @@ CREATE OR REPLACE FUNCTION public.sp_listar_order_detail_x_tikect(vi_tikect char
                 product_color            character varying,
                 product_size             character varying
             )
-    LANGUAGE plpgsql
-AS
+    language plpgsql
+as
 $$
 
-BEGIN
+begin
 
-    RETURN QUERY
-        SELECT om.order_id as order_master_id,
+    return query
+        select om.order_id as order_master_id,
                om.order_number,
                od.product as  product_name,
                ro.description reason_name,
@@ -35,6 +35,6 @@ BEGIN
         where od.quantity_products_return > 0
           and om.order_number = vi_tikect;
 
-END;
+end;
 
 $$;

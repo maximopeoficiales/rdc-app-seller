@@ -1,10 +1,10 @@
-CREATE OR REPLACE FUNCTION sp_list_products_by_order(orderid bigint)
-    returns TABLE(product_id character varying, quantity_products integer, quantity_products_return integer, quantity_products_return_real integer)
+create or replace function sp_list_products_by_order(orderid bigint)
+    returns table(product_id character varying, quantity_products integer, quantity_products_return integer, quantity_products_return_real integer)
     language plpgsql
 as
 $$
-BEGIN 
- RETURN QUERY 
+begin 
+ return query 
  select 
 	od.product_id, 
 	od.quantity_products, 
@@ -14,7 +14,7 @@ BEGIN
 		 end ) as quantity_products_return_real
  from order_detail od
  where od.order_id = orderid;
-END;
+end;
 $$;
 
 

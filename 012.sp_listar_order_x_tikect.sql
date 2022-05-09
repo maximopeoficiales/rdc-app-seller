@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_order_x_tikect(vi_tikect character varying)
-    RETURNS TABLE
+create or replace function public.sp_listar_order_x_tikect(vi_tikect character varying)
+    returns table
             (
                 order_id                 bigint,
                 prospect_order           bigint,
@@ -43,15 +43,15 @@ CREATE OR REPLACE FUNCTION public.sp_listar_order_x_tikect(vi_tikect character v
             )
 as
 $$
-BEGIN
-    RETURN QUERY
-        SELECT *,
+begin
+    return query
+        select *,
                c.order_id            as order_master_id,
                c.amount_total        as monto_total,
                c.amount_total_return as monto_total_return,
                c.amount_total_change as monto_total_change
-        FROM public."order" as c
-        WHERE c.order_number = vi_tikect;
-END;
+        from public."order" as c
+        where c.order_number = vi_tikect;
+end;
 $$
-    LANGUAGE plpgsql;
+    language plpgsql;

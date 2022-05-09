@@ -1,98 +1,98 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_email_for_send_faild() RETURNS TABLE(order_master_id bigint, prospect_order bigint, order_number character varying, identity_document character varying, email character varying, purchase_type_id integer, purchase_date date, number_products integer, number_products_unique integer, number_products_return integer, number_products_change integer, monto_total numeric, monto_total_return numeric, monto_total_change numeric, estado_request integer, flag_send_email integer, id_qr character varying, category_id integer, category character varying, method_id integer, bar_code character varying, person_first_name character varying, person_last_name character varying, person_identity_document character varying, created_at timestamp with time zone, email_client character varying, name_client character varying, intentos bigint)
-    LANGUAGE plpgsql
-    AS $$
+create or replace function public.sp_listar_email_for_send_faild() returns table(order_master_id bigint, prospect_order bigint, order_number character varying, identity_document character varying, email character varying, purchase_type_id integer, purchase_date date, number_products integer, number_products_unique integer, number_products_return integer, number_products_change integer, monto_total numeric, monto_total_return numeric, monto_total_change numeric, estado_request integer, flag_send_email integer, id_qr character varying, category_id integer, category character varying, method_id integer, bar_code character varying, person_first_name character varying, person_last_name character varying, person_identity_document character varying, created_at timestamp with time zone, email_client character varying, name_client character varying, intentos bigint)
+    language plpgsql
+    as $$
 
 	/*************
 
-		| * Descripcion : FUNCTION public.sp_listar_email_for_send_faild
+		| * descripcion : function public.sp_listar_email_for_send_faild
 
-		| * Proposito   : Función para listar correos reintento.
+		| * proposito   : función para listar correos reintento.
 
-		| * Input Parameters:
+		| * input parameters:
 
-		| * Output Parameters:
+		| * output parameters:
 
-		|   - <order_master_id>            :Id order master.
+		|   - <order_master_id>            :id order master.
 
-		|   - <prospect_order>             :Prospecto de la orden.
+		|   - <prospect_order>             :prospecto de la orden.
 
-		|   - <order_number>               :Número de orden.
+		|   - <order_number>               :número de orden.
 
-		|   - <identity_document>          :Documento de identidad.
+		|   - <identity_document>          :documento de identidad.
 
-		|   - <email>                      :Email.
+		|   - <email>                      :email.
 
-		|   - <purchase_type_id>           :Id de tipo de compra.
+		|   - <purchase_type_id>           :id de tipo de compra.
 
-		|   - <purchase_date>              :Fecha de compra.
+		|   - <purchase_date>              :fecha de compra.
 
-		|   - <number_products>            :Número de productos.
+		|   - <number_products>            :número de productos.
 
-		|   - <number_products_unique>     :Número de productos únicos.
+		|   - <number_products_unique>     :número de productos únicos.
 
-		|   - <number_products_return>     :Número de productos devueltos.
+		|   - <number_products_return>     :número de productos devueltos.
 
-		|   - <number_products_change>     :Número de productos cambiados.
+		|   - <number_products_change>     :número de productos cambiados.
 
-		|   - <monto_total>                :Monto total.
+		|   - <monto_total>                :monto total.
 
-		|   - <monto_total_return>         :Monto total devuelto.
+		|   - <monto_total_return>         :monto total devuelto.
 
-		|   - <monto_total_change>         :Monto total de cambio.
+		|   - <monto_total_change>         :monto total de cambio.
 
-		|   - <estado_request>             :Estado de la solicitud.
+		|   - <estado_request>             :estado de la solicitud.
 
-		|   - <flag_send_email>            :Bandera de envio de correo.
+		|   - <flag_send_email>            :bandera de envio de correo.
 
-		|   - <id_qr>                      :Id de código de barras.
+		|   - <id_qr>                      :id de código de barras.
 
-		|   - <category_id>                :Id de categoria.
+		|   - <category_id>                :id de categoria.
 
-		|   - <category>                   :Categoria.
+		|   - <category>                   :categoria.
 
-		|   - <return_method_id>           :Id de metodo de compra.
+		|   - <return_method_id>           :id de metodo de compra.
 
-		|   - <bar_code>                   :Código de barras.
+		|   - <bar_code>                   :código de barras.
 
-		|   - <person_first_name>          :Nombre de la persona devolución a terceros.
+		|   - <person_first_name>          :nombre de la persona devolución a terceros.
 
-		|   - <person_last_name>           :Apellidos de la persona devolución a terceros.
+		|   - <person_last_name>           :apellidos de la persona devolución a terceros.
 
-		|   - <person_identity_document>   :Documento de identidad de la persona devolución a terceros.
+		|   - <person_identity_document>   :documento de identidad de la persona devolución a terceros.
 
-		|   - <created_at>                 :Fecha de la solicitud.
+		|   - <created_at>                 :fecha de la solicitud.
 
-		|   - <email_client>               :Correo del cliente de compra online.
+		|   - <email_client>               :correo del cliente de compra online.
 
-		|   - <name_client>               :Nombre del cliente de compra online.
+		|   - <name_client>               :nombre del cliente de compra online.
 
-		|   - <intentos>                   :Número de intentos.
+		|   - <intentos>                   :número de intentos.
 
-		| * Autor       : Gianmarcos Perez Rojas.
+		| * autor       : gianmarcos perez rojas.
 
-		| * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+		| * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
 
-		| * Responsable : Cesar Jimenez.
+		| * responsable : cesar jimenez.
 
-		| * RDC         : RQ-4657-14
+		| * rdc         : rq-4657-14
 
 		|
 
-		| * Revisiones
+		| * revisiones
 
-		| * Fecha            Autor       Motivo del cambio            			RDC
+		| * fecha            autor       motivo del cambio            			rdc
 
 		| ----------------------------------------------------------------------------
 
-		| - 16/11/21    Rulman Ferro   Listar correos que no se enviaron      RQ 4657-14
+		| - 16/11/21    rulman ferro   listar correos que no se enviaron      rq 4657-14
 
 	************/
 
-	DECLARE
+	declare
 
 		n_solicitudes_pendientes integer := 5;
 
-	BEGIN
+	begin
 
 
 
@@ -100,9 +100,9 @@ CREATE OR REPLACE FUNCTION public.sp_listar_email_for_send_faild() RETURNS TABLE
 
 
 
-		RETURN QUERY
+		return query
 
-			SELECT a.order_id as order_master_id,
+			select a.order_id as order_master_id,
 
 				a.prospect_order,
 
@@ -152,31 +152,31 @@ CREATE OR REPLACE FUNCTION public.sp_listar_email_for_send_faild() RETURNS TABLE
 
 				a.created_at,
 
-				/*INICIO CAMBIO RQ 4657-14*/
+				/*inicio cambio rq 4657-14*/
 
 				p.email_client,
 
 				p.name_client,
 
-				/*FIN CAMBIO RQ 4657-14*/
+				/*fin cambio rq 4657-14*/
 
 				count(distinct c.order_master_id) as intentos
 
-		FROM "order" a
+		from "order" a
 
 		left join order_category b
 
 		on b.order_category_id = a.category_id
 
-		inner JOIN send_email c
+		inner join send_email c
 
-		ON c.order_master_id = a.order_id
+		on c.order_master_id = a.order_id
 
-		join purchase p ON p.purchase_id = a.purchase_id
+		join purchase p on p.purchase_id = a.purchase_id
 
-		WHERE a.estado_request in (5,6) and c.status_code = 8 and a.flag_send_email_security = 0
+		where a.estado_request in (5,6) and c.status_code = 8 and a.flag_send_email_security = 0
 
-		GROUP BY a.order_id,
+		group by a.order_id,
 
 				a.prospect_order,
 
@@ -226,17 +226,17 @@ CREATE OR REPLACE FUNCTION public.sp_listar_email_for_send_faild() RETURNS TABLE
 
 				a.created_at,
 
-				/*INICIO CAMBIO RQ 4657-14*/
+				/*inicio cambio rq 4657-14*/
 
 				p.email_client,
 
 				p.name_client
 
-				/*FIN CAMBIO RQ 4657-14*/
+				/*fin cambio rq 4657-14*/
 
-		HAVING count(c.order_master_id) < 4;
+		having count(c.order_master_id) < 4;
 
-	END;
+	end;
 
 	$$;
 

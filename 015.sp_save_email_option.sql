@@ -1,13 +1,13 @@
-CREATE OR REPLACE FUNCTION public.sp_save_email_option(email_option_save character varying, id_order_master integer)
-    RETURNS TABLE
+create or replace function public.sp_save_email_option(email_option_save character varying, id_order_master integer)
+    returns table
             (
                 state_email_option integer
             )
-    LANGUAGE plpgsql
-AS
+    language plpgsql
+as
 $$
 
-BEGIN
+begin
 
     update "order"
     set estado_request     = 2,
@@ -15,11 +15,11 @@ BEGIN
         state_email_option = 1
     where order_id = id_order_master;
 
-    RETURN QUERY
-        SELECT o.state_email_option
+    return query
+        select o.state_email_option
 
-        FROM "order" o
-        WHERE o.order_id = id_order_master;
+        from "order" o
+        where o.order_id = id_order_master;
 
-END;
+end;
 $$;

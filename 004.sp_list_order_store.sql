@@ -1,129 +1,129 @@
-CREATE OR REPLACE FUNCTION sp_list_order_store(vi_sucursal character varying, vi_caja character varying, vi_purchase_date character varying, vi_transaction character varying)
-    returns TABLE(estado_request integer[], estado character varying[], product_id character varying, quantity_products integer, quantity_products_return bigint, reason_operation_id integer, reason_operation text, operation_type_id integer, operation_type text, flag_offers integer, flag_returned integer, flag_blocking integer, type_blocking integer, description_blocking text, sub_title_fecha text, condition character varying, days_expiration integer, flag_mostrar integer)
+create or replace function sp_list_order_store(vi_sucursal character varying, vi_caja character varying, vi_purchase_date character varying, vi_transaction character varying)
+    returns table(estado_request integer[], estado character varying[], product_id character varying, quantity_products integer, quantity_products_return bigint, reason_operation_id integer, reason_operation text, operation_type_id integer, operation_type text, flag_offers integer, flag_returned integer, flag_blocking integer, type_blocking integer, description_blocking text, sub_title_fecha text, condition character varying, days_expiration integer, flag_mostrar integer)
     language plpgsql
 as
 $$
     /*************
 
-    | * Descripcion : FUNCTION public.sp_list_order_store
+    | * descripcion : function public.sp_list_order_store
 
-    | * Proposito   : Función para listar las ordenes de tiendas fisicas.
+    | * proposito   : función para listar las ordenes de tiendas fisicas.
 
-    | * Input Parameters:
+    | * input parameters:
 
-    |   - <vi_sucursal>                           		:Sucursal.
+    |   - <vi_sucursal>                           		:sucursal.
 
-    |   - <vi_caja>                           			:Caja.
+    |   - <vi_caja>                           			:caja.
 
-    |   - <vi_purchase_date>                           	:Fecha de compra.
+    |   - <vi_purchase_date>                           	:fecha de compra.
 
-    |   - <vi_transaction>                           	:Transaccion.
+    |   - <vi_transaction>                           	:transaccion.
 
-    | * Output Parameters:
+    | * output parameters:
 
-    |   - <estado_request>                                 :Estado de solicitud.
+    |   - <estado_request>                                 :estado de solicitud.
 
-    |   - <estado>                                         :Estado.
+    |   - <estado>                                         :estado.
 
-    |   - <product_id>                                     :ID del producto.
+    |   - <product_id>                                     :id del producto.
 
-    |   - <quantity_products>                              :Cantidad de productos.
+    |   - <quantity_products>                              :cantidad de productos.
 
-    |   - <quantity_products_return>                       :Cantidad de productos devueltos.
+    |   - <quantity_products_return>                       :cantidad de productos devueltos.
 
-    |   - <reason_operation_id>                            :Sucursal.
+    |   - <reason_operation_id>                            :sucursal.
 
-    |   - <reason_operation>                               :Monto.
+    |   - <reason_operation>                               :monto.
 
-    |   - <operation_type_id>                              :Monto afecto.
+    |   - <operation_type_id>                              :monto afecto.
 
-    |   - <operation_type>                                 :Tipo de operación.
+    |   - <operation_type>                                 :tipo de operación.
 
-    |   - <flag_offers>                                    :Bandera de oferta.
+    |   - <flag_offers>                                    :bandera de oferta.
 
-    |   - <flag_returned>                                  :Bandera de retorno.
+    |   - <flag_returned>                                  :bandera de retorno.
 
-    |   - <flag_blocking>                                  :Bandera de bloqueo.
+    |   - <flag_blocking>                                  :bandera de bloqueo.
 
-    |   - <type_blocking>                                  :Tipo de bloqueo.
+    |   - <type_blocking>                                  :tipo de bloqueo.
 
-    |   - <description_blocking>                           :Descripción de bloqueo.
+    |   - <description_blocking>                           :descripción de bloqueo.
 
-    |   - <condition>                                      :Condición.
+    |   - <condition>                                      :condición.
 
-    |   - <days_expiration>                                :Días de expiración.
+    |   - <days_expiration>                                :días de expiración.
 
-    | * Autor       : Gianmarcos Perez Rojas.
+    | * autor       : gianmarcos perez rojas.
 
-    | * Proyecto    : RQ 4657 - Soluciones Customer Focus: Auto-Atención / Trazabilidad.
+    | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
 
-    | * Responsable : Cesar Jimenez.
+    | * responsable : cesar jimenez.
 
-    | * RDC         : RQ-4657-14   
+    | * rdc         : rq-4657-14   
 
     |
 
-    | * Revisiones
+    | * revisiones
 
-    | * Fecha            Autor       Motivo del cambio            RDC
+    | * fecha            autor       motivo del cambio            rdc
 
     | ----------------------------------------------------------------------------
 
-    | - 17/11/21    Rulman Ferro   Listar orden de compra        RQ 4657-14       
+    | - 17/11/21    rulman ferro   listar orden de compra        rq 4657-14       
 
     ************/
 
-	DECLARE
+	declare
 
-		reg RECORD;
+		reg record;
 
 		n_purchase_id       int:=0; 
 
 		n_order_master_id   int:=0;
 
-	BEGIN 
+	begin 
 
 	
 
-	  SELECT b.purchase_id,
+	  select b.purchase_id,
 
 	   max(case when  a.estado_request not in (3,5) then coalesce(a.order_id, 0) else 0 end) into n_purchase_id, n_order_master_id
 
-	  FROM     public.purchase b
+	  from     public.purchase b
 
-	  LEFT JOIN "order" a
+	  left join "order" a
 
 	  on a.purchase_id = b.purchase_id
 
-	  WHERE b.sucursal = LPAD(vi_sucursal, 6, '0') AND
+	  where b.sucursal = lpad(vi_sucursal, 6, '0') and
 
-	        b.caja = LPAD(vi_caja, 6, '0') AND
+	        b.caja = lpad(vi_caja, 6, '0') and
 
-	        b.purchase_date = to_char(to_date(vi_purchase_date,'dd-mm-yyyy'), 'yyyy-mm-dd') AND
+	        b.purchase_date = to_char(to_date(vi_purchase_date,'dd-mm-yyyy'), 'yyyy-mm-dd') and
 
-	        b.transaccion = LPAD(vi_transaction, 6, '0')
+	        b.transaccion = lpad(vi_transaction, 6, '0')
 
-	  GROUP BY b.purchase_id;
+	  group by b.purchase_id;
 
 	  
 
 	 
 
-	 IF n_order_master_id = 0 THEN
+	 if n_order_master_id = 0 then
 
-	  RETURN QUERY  
+	  return query  
 
 		 select 
 
-				ARRAY_AGG(a.estado_request) as estado_request, 
+				array_agg(a.estado_request) as estado_request, 
 
-				ARRAY_AGG(a.id_qr) as estado, 
+				array_agg(a.id_qr) as estado, 
 
 				pd.product_id as product_id, 
 
-				MAX(coalesce(pd.quantity_products,0)) as quantity_products, 
+				max(coalesce(pd.quantity_products,0)) as quantity_products, 
 
-				SUM(coalesce(pd.quantity_products_return,0)) as quantity_products_return,
+				sum(coalesce(pd.quantity_products_return,0)) as quantity_products_return,
 
 				0 as reason_operation_id,
 
@@ -137,7 +137,7 @@ $$
 
 				0 as flag_returned,
 
-				MAX(case 
+				max(case 
 
 					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60) < current_date then 1  
 
@@ -147,7 +147,7 @@ $$
 
 					end) as flag_blocking,
 
-			    MAX(case    
+			    max(case    
 
 					 when g.is_transport = 1 then 2
 
@@ -155,39 +155,39 @@ $$
 
 					end) as type_blocking,
 
-				MAX(case 
+				max(case 
 
-					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60) < current_date then 'Pasó la fecha límite de devolución' 
+					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60) < current_date then 'pasó la fecha límite de devolución' 
 
-					 when g.is_transport = 1 then 'Producto no transportable' 
+					 when g.is_transport = 1 then 'producto no transportable' 
 
 					 else '-'
 
 					end) as description_blocking,
 
-				MAX(case 
+				max(case 
 
-					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60)> current_date then /*INICIO CAMBIO RQ 4657-14*/ 'Fec. límite: ' /*FIN CAMBIO RQ 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60), 'dd/mm/yyyy') 
+					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60)> current_date then /*inicio cambio rq 4657-14*/ 'fec. límite: ' /*fin cambio rq 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60), 'dd/mm/yyyy') 
 
-					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60) <= current_date then /*INICIO CAMBIO RQ 4657-14*/'Fec. límite: ' /*FIN CAMBIO RQ 4657-14*/|| to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60), 'dd/mm/yyyy') 
+					 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60) <= current_date then /*inicio cambio rq 4657-14*/'fec. límite: ' /*fin cambio rq 4657-14*/|| to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(pd.days_expiration,60), 'dd/mm/yyyy') 
 
 					 else '-'
 
 					end) as sub_title_fecha ,
 
-					(CASE WHEN (g.condition is null) THEN 'A' ELSE g.condition END) as condition,
+					(case when (g.condition is null) then 'a' else g.condition end) as condition,
 
 					coalesce(pd.days_expiration,60) as days_expiration,
 
 					g.mostrar as flag_mostrar
 
-			FROM public.purchase pur 
+			from public.purchase pur 
 
 			inner join public.purchase_detail pd 
 
 			on pd.purchase_id = pur.purchase_id 
 
-			LEFT JOIN "order" a
+			left join "order" a
 
 			on a.purchase_id = pur.purchase_id   
 
@@ -195,25 +195,25 @@ $$
 
 			on g.classification_products_id  = pd.classification_products_id 
 
-			  WHERE pur.purchase_id = n_purchase_id 
+			  where pur.purchase_id = n_purchase_id 
 
-			GROUP BY pd.product_id , g.condition, pd.days_expiration, g.mostrar  ; 	  
+			group by pd.product_id , g.condition, pd.days_expiration, g.mostrar  ; 	  
 
-	 ELSE	
+	 else	
 
-	  RETURN QUERY  
+	  return query  
 
-			SELECT 
+			select 
 
-			ARRAY_AGG(a.estado_request) as estado_request, 
+			array_agg(a.estado_request) as estado_request, 
 
-			ARRAY_AGG(d.description) as estado, 
+			array_agg(d.description) as estado, 
 
 			c.product_id as product_id, 
 
-			MAX(coalesce(c.quantity_products,0)) as quantity_products, 
+			max(coalesce(c.quantity_products,0)) as quantity_products, 
 
-			SUM((case when a.estado_request = 4 then coalesce(c.quantity_products_return_real,0)
+			sum((case when a.estado_request = 4 then coalesce(c.quantity_products_return_real,0)
 
 				            else 
 
@@ -223,17 +223,17 @@ $$
 
 			) as quantity_products_return,
 
-			MAX(c.reason_operation_id) as reason_operation_id,
+			max(c.reason_operation_id) as reason_operation_id,
 
-			MAX(f.description) as reason_operation,
+			max(f.description) as reason_operation,
 
-			MAX(coalesce(c.operation_type_id,0)) as operation_type_id,
+			max(coalesce(c.operation_type_id,0)) as operation_type_id,
 
-			MAX(e.description) as operation_type, 
+			max(e.description) as operation_type, 
 
-			MAX(coalesce(c.flag_offers,0)) as flag_offers,
+			max(coalesce(c.flag_offers,0)) as flag_offers,
 
-			MAX(case 
+			max(case 
 
 				 when (case when a.estado_request = 4 then c.quantity_products_return_real 
 
@@ -245,7 +245,7 @@ $$
 
 				end) as flag_returned,
 
-			MAX(case 
+			max(case 
 
 				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) < current_date then 1  
 
@@ -255,7 +255,7 @@ $$
 
 				end) as flag_blocking,
 
-			MAX(case    
+			max(case    
 
 				 when g.is_transport = 1 then 2
 
@@ -263,73 +263,73 @@ $$
 
 				end) as type_blocking,
 
-			MAX(case 
+			max(case 
 
-				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) < current_date then 'Pasó la fecha límite de devolución'  
+				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) < current_date then 'pasó la fecha límite de devolución'  
 
-				 when g.is_transport = 1 then 'Producto no transportable' 
+				 when g.is_transport = 1 then 'producto no transportable' 
 
 				 else '-'
 
 				end) as description_blocking,
 
-			MAX(case 
+			max(case 
 
-				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) > current_date then /*INICIO CAMBIO RQ 4657-14*/'Fec. límite: '/*FIN CAMBIO RQ 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60), 'dd/mm/yyyy') 
+				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) > current_date then /*inicio cambio rq 4657-14*/'fec. límite: '/*fin cambio rq 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60), 'dd/mm/yyyy') 
 
-				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) <= current_date then /*INICIO CAMBIO RQ 4657-14*/'Fec. límite: ' /*FIN CAMBIO RQ 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60), 'dd/mm/yyyy') 
+				 when to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60) <= current_date then /*inicio cambio rq 4657-14*/'fec. límite: ' /*fin cambio rq 4657-14*/ || to_char(to_date(pur.purchase_date,'yyyy-mm-dd') + coalesce(c1.days_expiration,60), 'dd/mm/yyyy') 
 
 				 else '-'
 
 				end) as sub_title_fecha,
 
-				(CASE WHEN (g.condition is null) THEN 'A' ELSE g.condition END) as condition,
+				(case when (g.condition is null) then 'a' else g.condition end) as condition,
 
 		   coalesce(c1.days_expiration ,60) as days_expiration,
 
 		   g.mostrar as flag_mostrar
 
-		FROM public.purchase pur 
+		from public.purchase pur 
 
-		INNER JOIN "order" a
+		inner join "order" a
 
 		on a.purchase_id = pur.purchase_id  
 
-		INNER JOIN order_detail c
+		inner join order_detail c
 
-		ON c.order_id = a.order_id
+		on c.order_id = a.order_id
 
-		INNER JOIN purchase_detail c1
+		inner join purchase_detail c1
 
-		ON c1.product_id = c.product_id
+		on c1.product_id = c.product_id
 
 		   and c1.purchase_id = pur.purchase_id 
 
-		INNER JOIN state_movements d
+		inner join state_movements d
 
-		ON d.state_movements_id = a.estado_request
+		on d.state_movements_id = a.estado_request
 
-		INNER JOIN operation_type e
+		inner join operation_type e
 
-		ON e.operation_type_id = c.operation_type_id
+		on e.operation_type_id = c.operation_type_id
 
-		INNER JOIN reason_operation f
+		inner join reason_operation f
 
-		ON f.reason_operation_id = c.reason_operation_id
+		on f.reason_operation_id = c.reason_operation_id
 
 	    left join public.classification_products g
 
 		on g.classification_products_id  = c1.classification_products_id 
 
-		  WHERE pur.purchase_id = n_purchase_id  and a.estado_request in (2,4)
+		  where pur.purchase_id = n_purchase_id  and a.estado_request in (2,4)
 
-		GROUP BY c.product_id , g.condition, c1.days_expiration, g.mostrar ;
+		group by c.product_id , g.condition, c1.days_expiration, g.mostrar ;
 
-	 END IF;
+	 end if;
 
 					 
 
-	END
+	end
 
 $$;
 

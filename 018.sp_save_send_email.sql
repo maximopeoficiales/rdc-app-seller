@@ -1,20 +1,20 @@
-CREATE OR REPLACE FUNCTION sp_save_send_email(ni_order_master_id integer, ni_send_success integer, vi_asunto character varying, vi_destination_email character varying, vi_emails_cc character varying, OUT vo_ind integer, OUT vo_msn character varying) returns record
+create or replace function sp_save_send_email(ni_order_master_id integer, ni_send_success integer, vi_asunto character varying, vi_destination_email character varying, vi_emails_cc character varying, out vo_ind integer, out vo_msn character varying) returns record
     language plpgsql
 as
 $$
-DECLARE
+declare
 
-    reg RECORD;
+    reg record;
 
 	n_seq     bigint := nextval('order_movements_seq');
 
 	v_tikect  text; 
 
-BEGIN 
+begin 
 
     vo_ind:= 0;
 
-    vo_msn:= 'Se registro correctamente!!';
+    vo_msn:= 'se registro correctamente!!';
 
    
 
@@ -28,19 +28,19 @@ BEGIN
 
 	
 
-	INSERT INTO order_movements(
+	insert into order_movements(
 
 	order_movements_id, order_id, date_movements, state_movements_id, responsible_code)
 
-	VALUES (n_seq, ni_order_master_id, CURRENT_TIMESTAMP, 5, 'TESS'); 
+	values (n_seq, ni_order_master_id, current_timestamp, 5, 'tess'); 
 
-	INSERT INTO send_email(
+	insert into send_email(
 
 	request_movements_id, order_master_id, 
 
 	affair, destination_email, emails_cc, state_code_send, send_success, status_code)
 
-	VALUES (n_seq, ni_order_master_id, 
+	values (n_seq, ni_order_master_id, 
 
 			vi_asunto, vi_destination_email, vi_emails_cc, 5, ni_send_success, ni_send_success);
 
@@ -50,7 +50,7 @@ BEGIN
 
 	
 
-END
+end
 
 $$;
 

@@ -1,26 +1,26 @@
-CREATE OR REPLACE FUNCTION sp_update_qr(ni_order_master_id integer, vi_qr character varying, OUT vo_ind integer, OUT vo_msn character varying) returns record
+create or replace function sp_update_qr(ni_order_master_id integer, vi_qr character varying, out vo_ind integer, out vo_msn character varying) returns record
     language plpgsql
 as
 $$
-DECLARE
+declare
 
-    reg RECORD;
+    reg record;
 
 	n_seq     bigint := nextval('order_movements_seq');
 
 	v_tikect  text; 
 
-BEGIN 
+begin 
 
     vo_ind:= 0;
 
-    vo_msn:= 'Se registro correctamente!!';
+    vo_msn:= 'se registro correctamente!!';
 
     update "order" set id_qr = vi_qr where order_id = ni_order_master_id;
 
 	
 
-END
+end
 
 $$;
 

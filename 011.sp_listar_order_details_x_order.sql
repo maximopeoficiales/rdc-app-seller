@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_order_details_x_order(ni_order_id integer)
-    RETURNS TABLE
+create or replace function public.sp_listar_order_details_x_order(ni_order_id integer)
+    returns table
             (
                 order_detail_id               bigint,
                 order_id                      bigint,
@@ -39,11 +39,11 @@ CREATE OR REPLACE FUNCTION public.sp_listar_order_details_x_order(ni_order_id in
                 seller_id                     character varying,
                 order_master_id               bigint
             )
-    LANGUAGE plpgsql
-AS
+    language plpgsql
+as
 $$
-BEGIN
-    RETURN QUERY
-        SELECT c.*, c.order_id as order_master_id FROM order_detail as c WHERE c.order_id = ni_order_id;
-END;
+begin
+    return query
+        select c.*, c.order_id as order_master_id from order_detail as c where c.order_id = ni_order_id;
+end;
 $$;

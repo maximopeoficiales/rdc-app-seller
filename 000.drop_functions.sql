@@ -1,4 +1,5 @@
 -- deprecada
+drop function if exists sp_save_send_email_purchase /* funcion rota */
 drop function if exists fnt_get_git_card_white_list;
 -- funciones a modificar
 drop function if exists sp_list_order_internet;
@@ -20,4 +21,3 @@ drop function if exists sp_save_state_done_msa;
 drop function if exists sp_save_tikect_done_msa;
 drop function if exists sp_update_qr;
 
--- sp_save_send_email_purchase funcion rota

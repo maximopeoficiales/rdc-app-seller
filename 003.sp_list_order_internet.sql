@@ -26,10 +26,10 @@ $$
 DECLARE
     reg RECORD; n_purchase_id int := 0; n_order_master_id int := 0;
 BEGIN
-    SELECT b.purchase_id, max(case when a.estado_request not in (3, 5) then coalesce(a.order_id 0) else 0 end)
+    SELECT b.purchase_id, max(case when a.estado_request not in (3, 5) then coalesce(a.order_id ,0) else 0 end)
     into n_purchase_id, n_order_master_id
     FROM public.purchase b
-             LEFT JOIN order a on a.purchase_id = b.purchase_id
+             LEFT JOIN "order" a on a.purchase_id = b.purchase_id
     WHERE b.number_order = LPAD(vi_number_order, 15, '0')
     group by b.purchase_id;
     IF n_order_master_id = 0 THEN
@@ -70,7 +70,7 @@ BEGIN
                             g.mostrar                                                       as flag_mostrar
                      FROM public.purchase pur
                               inner join public.purchase_detail pd on pd.purchase_id = pur.purchase_id
-                              LEFT JOIN order a on a.purchase_id = pur.purchase_id
+                              LEFT JOIN "order" a on a.purchase_id = pur.purchase_id
                               left join public.classification_products g
                                         on g.classification_products_id = pd.classification_products_id
                      WHERE pur.purchase_id = n_purchase_id
@@ -118,7 +118,7 @@ BEGIN
                             coalesce(c1.days_expiration, 60)                                as days_expiration,
                             g.mostrar                                                       as flag_mostrar
                      FROM public.purchase pur
-                              INNER JOIN order a on a.purchase_id = pur.purchase_id
+                              INNER JOIN "order" a on a.purchase_id = pur.purchase_id
                               INNER JOIN order_detail c ON c.order_id = a.order_id
                               INNER JOIN purchase_detail c1
                                          ON c1.product_id = c.product_id and c1.purchase_id = pur.purchase_id
@@ -134,5 +134,3 @@ BEGIN
 END
 $$;
 
-
-ALTER FUNCTION public.sp_list_order_internet(vi_number_order character varying) OWNER TO intcouriersusr;

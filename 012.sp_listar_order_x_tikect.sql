@@ -1,4 +1,4 @@
-CREATE FUNCTION public.sp_listar_order_x_tikect(vi_tikect character varying)
+CREATE OR REPLACE FUNCTION public.sp_listar_order_x_tikect(vi_tikect character varying)
     RETURNS TABLE
             (
                 order_id                 bigint,

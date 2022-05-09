@@ -1,4 +1,4 @@
-CREATE FUNCTION public.sp_save_email_option(email_option_save character varying, id_order_master integer)
+CREATE OR REPLACE FUNCTION public.sp_save_email_option(email_option_save character varying, id_order_master integer)
     RETURNS TABLE
             (
                 state_email_option integer

@@ -1,6 +1,9 @@
 -- deprecada
 drop function if exists sp_save_send_email_purchase /* funcion rota */
 drop function if exists fnt_get_git_card_white_list;
+-- no existen
+drop function if exists fnt_find_git_card_x_dni;
+drop function if exists fnt_get_user_data;
 -- funciones a modificar
 drop function if exists sp_list_order_internet;
 drop function if exists sp_list_order_store;

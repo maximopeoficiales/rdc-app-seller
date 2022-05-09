@@ -1,4 +1,4 @@
-create function sp_update_qr(ni_order_master_id integer, vi_qr character varying, OUT vo_ind integer, OUT vo_msn character varying) returns record
+CREATE OR REPLACE FUNCTION sp_update_qr(ni_order_master_id integer, vi_qr character varying, OUT vo_ind integer, OUT vo_msn character varying) returns record
     language plpgsql
 as
 $$

@@ -1,4 +1,4 @@
-CREATE FUNCTION public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
+CREATE OR REPLACE FUNCTION public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
     RETURNS TABLE
             (
                 order_master_id     bigint,

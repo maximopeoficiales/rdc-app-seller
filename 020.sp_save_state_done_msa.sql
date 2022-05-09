@@ -1,4 +1,4 @@
-create function sp_save_state_done_msa(ni_order_master_id integer, ni_state integer, OUT vo_ind integer, OUT vo_msn character varying) returns record
+CREATE OR REPLACE FUNCTION sp_save_state_done_msa(ni_order_master_id integer, ni_state integer, OUT vo_ind integer, OUT vo_msn character varying) returns record
     language plpgsql
 as
 $$

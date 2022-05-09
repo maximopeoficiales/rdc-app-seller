@@ -1,4 +1,4 @@
-CREATE FUNCTION public.sp_list_order_internet(vi_number_order character varying)
+CREATE OR REPLACE FUNCTION public.sp_list_order_internet(vi_number_order character varying)
     RETURNS TABLE
             (
                 estado_request           integer[],

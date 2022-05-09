@@ -1,4 +1,4 @@
-CREATE FUNCTION public.sp_listar_order_details_x_order(ni_order_id integer)
+CREATE OR REPLACE FUNCTION public.sp_listar_order_details_x_order(ni_order_id integer)
     RETURNS TABLE
             (
                 order_detail_id               bigint,

@@ -1,4 +1,4 @@
-create function sp_listar_detail_email_for_send(ni_order_master_id integer)
+CREATE OR REPLACE FUNCTION sp_listar_detail_email_for_send(ni_order_master_id integer)
     returns TABLE
             (
                 order_detail_id               bigint,

@@ -1,4 +1,4 @@
-create function sp_save_tikect_done_msa(ni_order_detail_id integer, ni_order_id integer,
+CREATE OR REPLACE FUNCTION sp_save_tikect_done_msa(ni_order_detail_id integer, ni_order_id integer,
                                         vi_product_id character varying, ni_quantity_products_return_real integer,
                                         ni_monto_affected_real numeric, ni_flag_return integer,
                                         ni_reason_operation_id integer, OUT vo_ind integer,

@@ -1,4 +1,4 @@
-create function sp_save_send_email_security(ni_order_master_id integer, ni_send_success integer,
+CREATE OR REPLACE FUNCTION sp_save_send_email_security(ni_order_master_id integer, ni_send_success integer,
                                             vi_asunto character varying, vi_destination_email character varying,
                                             vi_emails_cc character varying, OUT vo_ind integer,
                                             OUT vo_msn character varying) returns record

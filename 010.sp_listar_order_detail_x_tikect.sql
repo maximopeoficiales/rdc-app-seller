@@ -15,7 +15,30 @@ as
 $$
 
 begin
-
+     /*************
+      | * descripcion : public.sp_listar_order_detail_x_tikect
+      | * proposito   : listar registros de order detail por ticket.
+      | * input parameters:
+      |   - <vi_tikect>                        	  : ticket de la orden.
+      | * output parameters:
+      |   - <order_master_id>                          :Id de la orden
+      |   - <order_number>                            :Numero de la orden
+      |   - <product_name>                          :nombre del producto
+      |   - <reason_name>                         :nombre de la razon
+      |   - <quantity_products_return>                 :cantidad de productos a retornar
+      |   - <price_by_unit>                           :precio por unidad
+      |   - <product_color>                           :color del producto
+      |   - <product_size>                           :tamaño del producto
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  creación de la función     rq 4707
+      ************/
     return query
         select om.order_id as order_master_id,
                om.order_number,

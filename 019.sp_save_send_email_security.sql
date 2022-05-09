@@ -7,9 +7,9 @@ as
 $$
     /*************
 
-        | * descripcion : function public.sp_list_order_store
+        | * descripcion : function public.sp_save_send_email_security
 
-        | * proposito   : funcion para listar las ordenes de tiendas fisicas.
+        | * proposito   : funcion para insertar movimientos de la orden.
 
         | * input parameters:
 
@@ -46,6 +46,8 @@ $$
         | ----------------------------------------------------------------------------
 
         | - 16/11/21    gianmarcos perez  guardar estado correo seguridad    rq 4657-14
+
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
 
     ************/
 

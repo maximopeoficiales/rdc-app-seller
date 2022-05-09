@@ -12,6 +12,31 @@ declare
     v_tikect text;
     n_state  integer := 4;
 begin
+          /*************
+      | * descripcion : public.sp_save_tikect_done_msa
+      | * proposito   : actualiza el order detail para guardar el ticket de finalizado del msa.
+      | * input parameters:
+      |   - <ni_order_detail_id>                      	 :Id de la orden de detalle.
+      |   - <ni_order_id>                      	 :Id de la orden.
+      |   - <vi_product_id>                      	 :Id del producto.
+      |   - <ni_quantity_products_return_real>       :Cantiddd del productos real.
+      |   - <ni_monto_affected_real>                      	 :Monto real afectado.
+      |   - <ni_flag_return>                      	 :Indicador de retornado.
+      |   - <ni_reason_operation_id>                      	 :Id de la razon de operacion.
+      |   - <vo_ind>                      	    :ind.
+      |   - <vo_msn>                      	    :msn.
+      | * output parameters:
+      |   - <record>                       : .
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
+      ************/
     vo_ind := 0;
     vo_msn := 'se registro correctamente!!';
     /*

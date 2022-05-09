@@ -44,6 +44,27 @@ create or replace function public.sp_listar_order_x_tikect(vi_tikect character v
 as
 $$
 begin
+ /*************
+      | * descripcion : public.sp_listar_order_x_tikect
+      | * proposito   : listar ordernes por numero de ticket.
+      | * input parameters:
+      |   - <vi_tikect>                        	  : numero de ticket.
+      | * output parameters:
+      |    - <order>  : Instancia con todos registro de la tabla order.
+      |    - <order_master_id>      : Id de la orden.
+      |    - <monto_total>          : Monto total.
+      |    - <monto_total_return>      : Monto Total Retornado.
+      |    - <monto_total_change>      : Monto total cambiado.
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
+      ************/
     return query
         select *,
                c.order_id            as order_master_id,

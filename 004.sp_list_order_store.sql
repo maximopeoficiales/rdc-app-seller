@@ -55,11 +55,11 @@ $$
 
     | * autor       : gianmarcos perez rojas.
 
-    | * proyecto    : rq 4657 - soluciones customer focus: auto-atención / trazabilidad.
+    | * proyecto    : rq 4707 - soluciones customer focus: auto-atención / trazabilidad.
 
     | * responsable : cesar jimenez.
 
-    | * rdc         : rq-4657-14   
+    | * rdc         : rq 4707   
 
     |
 
@@ -69,7 +69,7 @@ $$
 
     | ----------------------------------------------------------------------------
 
-    | - 17/11/21    rulman ferro   listar orden de compra        rq 4657-14       
+    | - 09/05/22    maximo apaza    modificacion de la funcion   rq 4707       
 
     ************/
 

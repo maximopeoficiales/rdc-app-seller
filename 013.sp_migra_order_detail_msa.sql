@@ -144,6 +144,7 @@ begin
   | ----------------------------------------------------------------------------
 
   | - 30/03/22    paulo carbajal   se agrega el seller id, nombre, suborden y tipo de producto             rq 4707-4
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
 
 
 

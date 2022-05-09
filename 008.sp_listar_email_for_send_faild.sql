@@ -85,6 +85,7 @@ create or replace function public.sp_listar_email_for_send_faild() returns table
 		| ----------------------------------------------------------------------------
 
 		| - 16/11/21    rulman ferro   listar correos que no se enviaron      rq 4657-14
+		| - 09/05/21    maximo apaza     rq 4707
 
 	************/
 

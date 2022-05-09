@@ -43,6 +43,24 @@ create or replace function public.sp_listar_order_details_x_order(ni_order_id in
 as
 $$
 begin
+ /*************
+      | * descripcion : public.sp_listar_order_details_x_order
+      | * proposito   : listar registros de order detail por id de la orden.
+      | * input parameters:
+      |   - <ni_order_id>                        	  : numero de la orden.
+      | * output parameters:
+      |    - <order_detail>  : Instancia con todos registro de tipo order detail.
+      |    - <order_master_id>      : Id de la orden.
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
+      ************/
     return query
         select c.*, c.order_id as order_master_id from order_detail as c where c.order_id = ni_order_id;
 end;

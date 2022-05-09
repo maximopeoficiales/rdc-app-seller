@@ -84,6 +84,7 @@ $$
         | ----------------------------------------------------------------------------
 
         | - 16/11/21    gianmarcos perez guardar orde de compra    rq 4657-14
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
 
     ************/
 

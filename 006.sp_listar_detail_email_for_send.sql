@@ -112,6 +112,7 @@ $$
      | - 14/09/21    gianmarcos perez se agrega sucursal y trx     rq 4657-8   
    
      | - 30/03/22    paulo carbajal nombre del vendedor            rq 4707-4                                                             
+     | - 09/05/22    maximo apaza   modificacion de funcion            rq 4707                                                            
    
      ************/
 

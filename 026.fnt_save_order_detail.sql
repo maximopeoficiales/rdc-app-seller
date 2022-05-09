@@ -14,8 +14,8 @@ as
 $function$
 begin
     /*************
-      | * descripcion : function public.creategiftcardphysical
-      | * proposito   : guarda un registro con los datos una giftcard fisica.
+      | * descripcion : public.fnt_save_order_detail
+      | * proposito   : guarda un registro en la tabla order detail.
       | * input parameters:
       |   - <order_id_p>                      	    :id de la orden.
       |   - <product_type_id_p>                     :id del tipo de producto.

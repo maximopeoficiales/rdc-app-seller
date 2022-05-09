@@ -8,6 +8,24 @@ as
 $$
 
 begin
+        /*************
+      | * descripcion : public.sp_save_email_option
+      | * proposito   : actualizacion de registro en la tabla order.
+      | * input parameters:
+      |   - <email_option_save>                      	 :Opcion del email a guardar.
+      |   - <id_order_master>                      	    :id de la orden.
+      | * output parameters:
+      |   - <state_email_option>                       : estado del email.
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
+      ************/
 
     update "order"
     set estado_request     = 2,

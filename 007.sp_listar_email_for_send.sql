@@ -75,6 +75,7 @@ create or replace function public.sp_listar_email_for_send() returns table(order
   | ----------------------------------------------------------------------------
 
   | - 14/09/21    gianmarcos perez se agrega sucursal y trx     rq 4657-8
+  | - 09/05/21    maximo apaza     rq 4707
 
   ************/
 

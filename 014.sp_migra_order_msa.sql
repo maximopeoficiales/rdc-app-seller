@@ -108,6 +108,7 @@ $$
         | ----------------------------------------------------------------------------
 
         | - 16/11/21    gianmarcos perez       agregar category_id    rq 4657-14
+      | - 09/05/22    maximo apaza  modificacion de la función     rq 4707
 
     ************/
 

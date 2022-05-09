@@ -4,9 +4,9 @@ create or replace function public.sp_listar_email_for_send_security() returns ta
 
 	/*************
 
-		| * descripcion : function public.sp_list_order_store
+		| * descripcion : function public.sp_listar_email_for_send_security
 
-		| * proposito   : funcion para listar las ordenes de tiendas fisicas.
+		| * proposito   : funcion para listar los emails enviados por seguridad.
 
 		| * input parameters:
 
@@ -81,7 +81,8 @@ create or replace function public.sp_listar_email_for_send_security() returns ta
 		| ----------------------------------------------------------------------------
 
 		| - 16/11/21    gianmarcos perez listar de correos de seguridad    rq 4657-14
-
+		| - 09/05/21    maximo apaza     rq 4707
+	
 	************/
 
 	declare

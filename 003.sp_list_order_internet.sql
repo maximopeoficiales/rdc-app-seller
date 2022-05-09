@@ -26,6 +26,41 @@ $$
 declare
     reg record; n_purchase_id int := 0; n_order_master_id int := 0;
 begin
+ /*************
+      | * descripcion : function public.sp_list_order_internet
+      | * proposito   : lista los registros de un orden de internet.
+      | * input parameters:
+      |   - <number_order>                      	    :Numero de la orden.
+      | * output parameters:
+      |   - <estado_request>                      	    :id de la orden.
+      |   - <estado>                     :id del tipo de producto.
+      |   - <product_id>                      	:id del producto.
+      |   - <quantity_products>                   :cantidad de productos.
+      |   - <quantity_products_return>            :cantidad de productos retornados.
+      |   - <reason_operation_id>                 :id de la razon de la operacion
+      |   - <reason_operation>                 :razon de la operacion
+      |   - <operation_type_id>                 :id del tipo de operacion
+      |   - <operation_type>                 :tipo de operacion
+      |   - <flag_offers>                 :indicador de ofertas
+      |   - <flag_returned>                 :indcador retornado
+      |   - <flag_blocking>                 :indicador de bloqueo
+      |   - <type_blocking>                 :tipo de bloqueo
+      |   - <description_blocking>                 :Descripcion de bloqueo
+      |   - <sub_title_fecha>                 : titulo de la fecha
+      |   - <condition>                 : condicion
+      |   - <days_expiration>                 :dias de expiracion
+      |   - <flag_mostrar>                 :indidcador de mostrar
+      | * autor       : gianmarcos perez rojas.
+      | * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
+      | * responsable : cesar jimenez.
+      | * rdc         : rq 4707
+      |
+      | * revisiones
+      | * fecha            autor       motivo del cambio            rdc
+      | ----------------------------------------------------------------------------
+      | - 09/05/22    maximo apaza  creación de la función     rq 4707
+      ************/
+  
     select b.purchase_id, max(case when a.estado_request not in (3, 5) then coalesce(a.order_id ,0) else 0 end)
     into n_purchase_id, n_order_master_id
     from public.purchase b

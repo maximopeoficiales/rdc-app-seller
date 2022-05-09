@@ -162,7 +162,7 @@ CREATE FUNCTION public.sp_listar_email_for_send_faild() RETURNS TABLE(order_mast
 
 				count(distinct c.order_master_id) as intentos
 
-		FROM order a
+		FROM "order" a
 
 		left join order_category b
 

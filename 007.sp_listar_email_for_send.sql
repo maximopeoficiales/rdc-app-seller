@@ -176,7 +176,7 @@ BEGIN
 
 			p.forma_pago
 
-	FROM order a
+	FROM "order" a
 
 	join purchase p on p.purchase_id = a.purchase_id
 

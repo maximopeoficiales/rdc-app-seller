@@ -150,7 +150,7 @@ CREATE FUNCTION public.sp_listar_email_for_send_security() RETURNS TABLE(order_m
 
 				a.created_at
 
-		FROM order a
+		FROM "order" a
 
 		join purchase p on p.purchase_id =a.purchase_id
 

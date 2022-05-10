@@ -1,3 +1,4 @@
+
 create or replace function public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
     returns table
             (
@@ -35,16 +36,12 @@ create or replace function public.sp_migra_order_detail_msa(ni_order_master_ini_
                 seller_id           character varying,
                 seller_name         character varying,
                 suborder            character varying,
-                type_product        character varying
+                type_product        character varying,
+                reason_text         varchar
             )
     language plpgsql
 as
 $$
-
-declare
-
-    r order%rowtype;
-
 begin
 
     /*************
@@ -77,7 +74,7 @@ begin
 
   |   - <descuento_articulo>                :descuento articulo.
 
-  |   - <descuento_boleta>                 :descuento boleta.
+  |   - <descuento_boleta>                 :descuento boletod.
 
   |   - <reason_operation_id>               :id motivo de devolucion.
 
@@ -117,7 +114,7 @@ begin
 
   |   - <mode_delivery>             :modo de delivery.
 
-  |   - <time_of_purchase>             :fecha de compra.
+  |   - <time_of_purchase>             :fecha de comprod.
 
   |   - <seller_id>             :id del vendedor.
 
@@ -151,96 +148,97 @@ begin
 ************/
 
     return query
-        select a.order_id as order_master_id,
-               a.product_id                                                                as ean,
+        select od.order_id                                                                 as order_master_id,
+               od.product_id                                                               as ean,
 
-               a.operation_type_id                                                         as flag_cambio,
+               od.operation_type_id                                                        as flag_cambio,
 
-               a.quantity_products                                                         as cantidad,
+               od.quantity_products                                                        as cantidad,
 
-               a.quantity_products_return                                                  as cantidad_return,
+               od.quantity_products_return                                                 as cantidad_return,
 
-               a.monto                                                                     as precio,
+               od.monto                                                                    as precio,
 
-               a.monto_affected                                                            as precio_affected,
+               od.monto_affected                                                           as precio_affected,
 
-               a.flag_offers                                                               as descuento_articulo,
+               od.flag_offers                                                              as descuento_articulo,
 
-               a.offers                                                                    as descuento_boleta,
+               od.offers                                                                   as descuento_boleta,
 
-               a.product,
+               od.product,
 
-               a.reason_operation_id,
+               od.reason_operation_id,
 
-               c.description                                                               as reason_operation,
+               rp.description                                                              as reason_operation,
 
-               a.operation_type_id,
+               od.operation_type_id,
 
-               b.description                                                               as operation_type,
+               op.description                                                              as operation_type,
 
-               a.model                                                                        model,
+               od.model                                                                       model,
 
-               a.size                                                                         size_product,
+               od.size                                                                        size_product,
 
-               a.product_url                                                                  image,
+               od.product_url                                                                 image,
 
-               a.brand,
+               od.brand,
 
-               a.price_by_unit,
+               od.price_by_unit,
 
-               d.is_enchufable,
+               cp.is_enchufable,
 
-               d.is_transport,
+               cp.is_transport,
 
-               coalesce(a1.days_expiration, 60)                                            as days_expiration,
+               coalesce(pd.days_expiration, 60)                                            as days_expiration,
 
-               to_char(ord.purchase_date + coalesce(a1.days_expiration, 60), 'yyyy-mm-dd') as expiration_date,
+               to_char(ord.purchase_date + coalesce(pd.days_expiration, 60), 'yyyy-mm-dd') as expiration_date,
 
-               a.price_by_unit_total,
+               od.price_by_unit_total,
 
-               a.promotion,
+               od.promotion,
 
-               a.promotion_code,
+               od.promotion_code,
 
-               (case when (d.condition is null) then 'a' else d.condition end)             as condition,
+               (case when (cp.condition is null) then 'a' else cp.condition end)           as condition,
 
-               a1.color,
+               pd.color,
 
-               a1.code_delivery,
+               pd.code_delivery,
 
-               a1.mode_delivery,
+               pd.mode_delivery,
 
-               a1.time_of_purchase,
+               pd.time_of_purchase,
 
-               a1.seller_id,
+               pd.seller_id,
 
-               a1.seller_name,
+               pd.seller_name,
 
-               a1.suborder,
+               pd.suborder,
 
-               a1.type_product
+               pd.type_product,
+               od.reason_text
 
-        from order_detail a
+        from order_detail od
 
                  inner join public."order" ord
-                            on ord.order_id = a.order_id
+                            on ord.order_id = od.order_id
 
-                 inner join purchase_detail a1
-                            on a1.product_id = a.product_id and
-                               a1.purchase_id = ord.purchase_id
+                 inner join purchase_detail pd
+                            on pd.product_id = od.product_id and
+                               pd.purchase_id = ord.purchase_id
 
-                 left join public.operation_type b
-                           on b.operation_type_id = a.operation_type_id
+                 left join public.operation_type op
+                           on op.operation_type_id = od.operation_type_id
 
-                 left join public.reason_operation c
-                           on c.reason_operation_id = a.reason_operation_id
+                 left join public.reason_operation rp
+                           on rp.reason_operation_id = od.reason_operation_id
 
-                 left join public.classification_products d
-                           on d.classification_products_id = a.classification_products_id
+                 left join public.classification_products cp
+                           on cp.classification_products_id = od.classification_products_id
 
-        where a.order_id >= ni_order_master_ini_id
-          and a.order_id <= ni_order_master_fin_id;
+        where od.order_id >= ni_order_master_ini_id
+          and od.order_id <= ni_order_master_fin_id;
 
 end;
 
-$$; 
+$$;

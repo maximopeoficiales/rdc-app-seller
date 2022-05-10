@@ -7,7 +7,7 @@ create or replace function public.fnt_save_order_detail(
     price_by_unit_total_p numeric, promotion_code_p varchar, promotion_p varchar, cupon_number_p varchar,
     promotion_discount_amount_p numeric,
     itemn_number_p integer, color_p varchar, size_p varchar,
-    suborder_p varchar, type_product_p varchar, seller_name_p varchar, seller_id_p varchar)
+    suborder_p varchar, type_product_p varchar, seller_name_p varchar, seller_id_p varchar,seller_text_p varchar)
     returns boolean
     language plpgsql
 as
@@ -42,6 +42,7 @@ begin
       |   - <type_product>                          :tipo de producto
       |   - <seller_name_p>                         :nombre del seller
       |   - <seller_id_p>                           :id del seller
+      |   - <reason_text>                           :razon
       | * output parameters:
       |   - <boolean>                        	  : estado de resultado.
       | * autor       : gianmarcos perez rojas.
@@ -59,14 +60,14 @@ begin
                              operation_type_id, reason_operation_id, product_url, flag_offers, offers, product, brand,
                              price_by_unit,
                              price_by_unit_total, promotion_code, promotion, cupon_number, promotion_discount_amount,
-                             itemn_number, color, size, suborder, type_product, seller_name, seller_id)
+                             itemn_number, color, size, suborder, type_product, seller_name, seller_id,reason_text)
     values (order_id_p, order_id_p, product_type_id_p, product_id_p,
             quantity_products_p, quantity_products_return_p, monto_p, monto_affected_p,
             operation_type_id_p, reason_operation_id_p, product_url_p, flag_offers_p, offers_p, product_p, brand_p,
             price_by_unit_p,
             price_by_unit_total_p, promotion_code_p, promotion_p, cupon_number_p, promotion_discount_amount_p,
             itemn_number_p, color_p, size_p
-               , suborder_p, type_product_p, seller_name_p, seller_id_p);
+               , suborder_p, type_product_p, seller_name_p, seller_id_p,seller_text_p);
 
     return true;
 end;

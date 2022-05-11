@@ -1,4 +1,3 @@
-
 create or replace function public.sp_migra_order_detail_msa(ni_order_master_ini_id integer, ni_order_master_fin_id integer)
     returns table
             (
@@ -37,7 +36,8 @@ create or replace function public.sp_migra_order_detail_msa(ni_order_master_ini_
                 seller_name         character varying,
                 suborder            character varying,
                 type_product        character varying,
-                reason_text         varchar
+                reason_text         varchar,
+                id_seller           bigint
             )
     language plpgsql
 as
@@ -123,6 +123,8 @@ begin
   |   - <suborder>             :suborden.
 
   |   - <type_product>             :tipo de producto marketplace o ripley.
+  |   - <reason_Text>             :Razon.
+  |   - <id_seller>             :Identificador de la tabla seller.
 
   | * autor       : paulo carbajal.
 
@@ -216,7 +218,8 @@ begin
                pd.suborder,
 
                pd.type_product,
-               od.reason_text
+               od.reason_text,
+               od.id_seller
 
         from order_detail od
 

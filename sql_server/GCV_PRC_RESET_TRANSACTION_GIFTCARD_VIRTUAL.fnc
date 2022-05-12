@@ -25,7 +25,7 @@ GO
 --12/05/2022	Maximo Apaza		Creacion de la funcion  RQ 4707 - 4
 ---------------------------------------------------------------------------------------
 --***********
-ALTER PROCEDURE [giftcard].[GCV_PRC_RESET_TRANSACTION_GIFTCARD_VIRTUAL](@p_purchase_order varchar(255))
+CREATE PROCEDURE [giftcard].[GCV_PRC_RESET_TRANSACTION_GIFTCARD_VIRTUAL](@p_purchase_order varchar(255))
 AS
 BEGIN
 	SET NOCOUNT ON;

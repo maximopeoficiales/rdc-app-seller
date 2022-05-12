@@ -1,16 +1,15 @@
-create or replace function fnt_save_seller(_param jsonb)
-    returns jsonb
+create function fnt_update_seller(id_p bigint, name_p varchar default null) returns jsonb
     language plpgsql
 as
 $$
     -- ***********************************************************************************************
-    -- Descripcion: < Función para crear un seller >
+    -- Descripcion: < Función para actualizar un seller >
     --
     -- Input Parameters: < _param - parámetros de creacion del distrito >
-    --  <id_seller_mirakl>                   :id del seller mirakl.
-    --  <name>                               :nombre del seller.
-    -- Output Parameters: < jsonb - objeto (Seller) >
-    --   - <json>                              : objeto de tipo Seller.
+    --  <id_p>                        :identificador de la tabla seller.
+    --  <name_p>                      :nombre del seller.
+    -- Output Parameters: < jsonb - objeto(Seller) >
+    --   - <json>                              : objeto de  Seller.
     -- * autor       : gianmarcos perez rojas.
     -- * proyecto    : rq 4707 - cambios y devoluciones –devuelve r
     -- * responsable : cesar jimenez.
@@ -20,18 +19,21 @@ $$
     -- ----------------------------------------------------------------------------
     -- - 10/05/22    maximo apaza  creación de la función     rq 4707
     -- ************
-
 declare
     context text;
-    data    jsonb = '{}';
-    error   jsonb = '{}';
-    next_id bigint;
+    data    jsonb  = '{}';
+    error   jsonb  = '{}';
+    _id     bigint = id_p;
+
 begin
-    select nextval(pg_get_serial_sequence('seller', 'id')) into next_id;
-    insert into seller(id, id_seller_mirakl, name)
-    values (next_id,_param ->> 'id_seller_mirakl', _param ->> 'name');
-    select fnt_retrieve_seller(jsonb_build_object('id', next_id)) -> 'data' -> 0
-    into data;
+    if name_p is not null then
+        update seller
+        set name       = name_p,
+            updated_at = current_timestamp
+        where id = _id;
+    end if;
+
+    select fnt_retrieve_seller(_id) -> 'data' -> 0 into data;
     return jsonb_build_object('data', data, 'error', error);
 
 exception
@@ -42,3 +44,4 @@ exception
 
 end;
 $$;
+

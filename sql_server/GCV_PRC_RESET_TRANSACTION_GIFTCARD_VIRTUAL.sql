@@ -1,16 +1,15 @@
-
 USE [GIFTCARD]
 GO
-/****** Object:  StoredProcedure [giftcard].[GCV_PRC_RESTET_TRANSACTION_GIFTCARD_VIRTUAL]    Script Date: 12/05/2022 9:17:04 ******/
+/* Object:  StoredProcedure [giftcard].[GCV_PRC_RESET_TRANSACTION_GIFTCARD_VIRTUAL]    Script Date: 12/05/2022 9:17:04 */
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
---****************************************************************************************
+--**********
 --Descripcion: Store procedure que realiza el reseteo de la transaccion de una giftcard borrando los registros relacionados al authcode(este es un codigo unico)
 
 --Input Parameters:
---@p_auth_code numeric,
+--@p_purchase_order varchar,
 
 --Output Parameters:
 -- 
@@ -25,18 +24,18 @@ GO
 ---------------------------------------------------------------------------------------
 --12/05/2022	Maximo Apaza		Creacion de la funcion  RQ 4707 - 4
 ---------------------------------------------------------------------------------------
---***************************************************************************************
-ALTER PROCEDURE [giftcard].[GCV_PRC_CRRESTETRANSACTION_GIFTCARD_VIRTUAL](@p_auth_code numeric)
+--***********
+ALTER PROCEDURE [giftcard].[GCV_PRC_RESET_TRANSACTION_GIFTCARD_VIRTUAL](@p_purchase_order varchar(255))
 AS
 BEGIN
 	SET NOCOUNT ON;
-        delete from [giftcard].[GiftcardEvents] where [trxHeader] = @p_auth_code;
-        delete from [giftcard].[GiftcardTrxItems] where [trxID] = @p_auth_code;
-        delete from [giftcard].[GiftcardTrxHeader] where [id]= @p_auth_code;
 
 	BEGIN TRAN GIFTCARD
-		
-		
+			declare @trxID numeric;
+			SELECT @trxID =id FROM [giftcard].[GiftcardTrxHeader] where [purchaseOrder] = @p_purchase_order;
+			delete from [giftcard].[GiftcardEvents] where [trxHeader] = @trxID;
+			delete from [giftcard].[GiftcardTrxItems] where [trxID] = @trxID
+			delete from [giftcard].[GiftcardTrxHeader] where [id]= @trxID;		
 	COMMIT TRAN GIFTCARD
 
 END

@@ -1,26 +1,5 @@
-create or replace function sp_list_order_store(vi_sucursal character varying, vi_caja character varying,
-                                               vi_purchase_date character varying, vi_transaction character varying)
-    returns table
-            (
-                estado_request           integer[],
-                estado                   character varying[],
-                product_id               character varying,
-                quantity_products        integer,
-                quantity_products_return bigint,
-                reason_operation_id      integer,
-                reason_operation         text,
-                operation_type_id        integer,
-                operation_type           text,
-                flag_offers              integer,
-                flag_returned            integer,
-                flag_blocking            integer,
-                type_blocking            integer,
-                description_blocking     text,
-                sub_title_fecha          text,
-                condition                character varying,
-                days_expiration          integer,
-                flag_mostrar             integer
-            )
+create function sp_list_order_store(vi_sucursal character varying, vi_caja character varying, vi_purchase_date character varying, vi_transaction character varying)
+    returns TABLE(estado_request integer[], estado character varying[], product_id character varying, quantity_products integer, quantity_products_return bigint, reason_operation_id integer, reason_operation text, operation_type_id integer, operation_type text, flag_offers integer, flag_returned integer, flag_blocking integer, type_blocking integer, description_blocking text, sub_title_fecha text, condition character varying, days_expiration integer, flag_mostrar integer)
     language plpgsql
 as
 $$

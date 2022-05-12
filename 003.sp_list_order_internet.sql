@@ -1,29 +1,9 @@
-        create or replace function public.sp_list_order_internet(vi_number_order character varying)
-        returns table
-                (
-                        estado_request           integer[],
-                        estado                   character varying[],
-                        product_id               character varying,
-                        quantity_products        integer,
-                        quantity_products_return bigint,
-                        reason_operation_id      integer,
-                        reason_operation         text,
-                        operation_type_id        integer,
-                        operation_type           text,
-                        flag_offers              integer,
-                        flag_returned            integer,
-                        flag_blocking            integer,
-                        type_blocking            integer,
-                        description_blocking     text,
-                        sub_title_fecha          text,
-                        condition                character varying,
-                        days_expiration          integer,
-                        flag_mostrar             integer
-                )
-        language plpgsql
-        as
-        $$
-        declare
+create function sp_list_order_internet(vi_number_order character varying)
+    returns TABLE(estado_request integer[], estado character varying[], product_id character varying, quantity_products integer, quantity_products_return bigint, reason_operation_id integer, reason_operation text, operation_type_id integer, operation_type text, flag_offers integer, flag_returned integer, flag_blocking integer, type_blocking integer, description_blocking text, sub_title_fecha text, condition character varying, days_expiration integer, flag_mostrar integer)
+    language plpgsql
+as
+$$
+declare
         reg record; n_purchase_id int := 0; n_order_master_id int := 0;
         begin
         /*************
@@ -167,5 +147,6 @@
                         group by c.product_id, g.condition, c1.days_expiration, g.mostrar, c.suborder;
         end if;
         end
-        $$;
+$$;
+
 
